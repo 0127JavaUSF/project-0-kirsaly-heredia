@@ -1,5 +1,6 @@
 package com.revature.views;
 
+import com.revature.models.Player;
 
 /*
  * Interface implemented by any class that represents a view that will display
@@ -7,6 +8,6 @@ package com.revature.views;
  */
 
 public interface View {
-	void showMenu();
+	void showMenu( );
 	View selectOption();
 }

@@ -2,65 +2,47 @@ package com.revature.models;
 
 public class Account {
 
-	private int accountNum;
+	private int acctNum;
 	private int balance;
-	private String accountType;
+	private String acctType;
 	
-	//getter and setters
-	public int getAccountNum() {
-		return accountNum;
+	public int getAcctNum() {
+		return acctNum;
 	}
-	
-	
-	public void setAccountNum(int accountNum) {
-		this.accountNum = accountNum;
+	public void setAcctNum(int acctNum) {
+		this.acctNum = acctNum;
 	}
-	
-	
 	public int getBalance() {
 		return balance;
 	}
-	
-	
 	public void setBalance(int balance) {
 		this.balance = balance;
 	}
-	
-	
-	public String getAccountType() {
-		return accountType;
+	public String getAcctType() {
+		return acctType;
 	}
-	
-	
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
+	public void setAcctType(String acctType) {
+		this.acctType = acctType;
 	}
-	
-	
-	//constructor
-	public Account(int accountNum, int balance, String accountType) {
+	public Account(int acctNum, int balance, String acctType) {
 		super();
-		this.accountNum = accountNum;
+		this.acctNum = acctNum;
 		this.balance = balance;
-		this.accountType = accountType;
+		this.acctType = acctType;
 	}
 	public Account() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	//hash code and equals
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + accountNum;
-		result = prime * result + ((accountType == null) ? 0 : accountType.hashCode());
+		result = prime * result + acctNum;
+		result = prime * result + ((acctType == null) ? 0 : acctType.hashCode());
 		result = prime * result + balance;
 		return result;
 	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -70,28 +52,21 @@ public class Account {
 		if (getClass() != obj.getClass())
 			return false;
 		Account other = (Account) obj;
-		if (accountNum != other.accountNum)
+		if (acctNum != other.acctNum)
 			return false;
-		if (accountType == null) {
-			if (other.accountType != null)
+		if (acctType == null) {
+			if (other.acctType != null)
 				return false;
-		} else if (!accountType.equals(other.accountType))
+		} else if (!acctType.equals(other.acctType))
 			return false;
 		if (balance != other.balance)
 			return false;
 		return true;
 	}
-	
-	
-	//to string
 	@Override
 	public String toString() {
-		return "Account [accountNum=" + accountNum + ", balance=" + balance + ", accountType=" + accountType + "]";
+		return "Account [acctNum=" + acctNum + ", balance=" + balance + ", acctType=" + acctType + "]";
 	}
 	
-	
-	
-
-
 	
 }
