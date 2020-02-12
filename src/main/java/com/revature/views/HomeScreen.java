@@ -29,14 +29,17 @@ public class HomeScreen implements View{
 	}
 	
 	
-	void login() {
+	Player login() {
 		System.out.println("Enter username: ");
 		String uname = InputUtil.getNextString();
+		
 		System.out.println("Enter password: ");
 		String pword = InputUtil.getNextString();
 		
 		Player player = PlayerDao.getPlayer(uname, pword);
 		System.out.println(player);
+		
+		return player;
 	}
 	
 	
@@ -54,7 +57,6 @@ public class HomeScreen implements View{
 		player = PlayerDao.createPlayer(player);
 		System.out.println(player);
 	}
-	
 	
 
 }

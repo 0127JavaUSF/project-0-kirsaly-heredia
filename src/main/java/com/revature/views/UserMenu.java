@@ -57,6 +57,12 @@ public class UserMenu implements View{
 		
 				
 	}	
+	//validate the user and their accounts
+	void validatePlayerInfo(Player player) {
+		
+	}
+	
+	
 	
 	// get information to show star balance account-------------------
 	void showStars() {
@@ -77,6 +83,14 @@ public class UserMenu implements View{
 		System.out.println("How many stars will you drop off.");
 		int depAmt = InputUtil.getNextInt();
 		
+		if (depAmt < 1) {
+			do {
+				System.out.println("You must drop off at least 1 star.");
+				System.out.println("How many stars will you drop off.");
+				depAmt = InputUtil.getNextInt();
+			} while (depAmt < 1);
+		}
+		
 		int balance = AccountDao.getAccount(acctID).getBalance();
 		balance += depAmt;
 		AccountDao.updateBalance(acctID, balance);
@@ -92,9 +106,18 @@ public class UserMenu implements View{
 		System.out.println("How many stars will you steal.");
 		int withAmt = InputUtil.getNextInt();
 		int balance = AccountDao.getAccount(acctID).getBalance();
+		
+		if (withAmt > balance) {
+			do {
+				System.out.println("You do not have that many stars in your account.");
+				System.out.println("How many stars will you steal.");
+				withAmt = InputUtil.getNextInt();
+			} while (withAmt > balance);
+		}
+		
 		balance -= withAmt;
 		AccountDao.updateBalance(acctID, balance);
-		System.out.println("You stole " + withAmt + " stars. Your new balance is " + balance + " stars.");
+		System.out.println("You stole " + withAmt + " stars from yourself. Your new balance is " + balance + " stars.");
 	}
 	
 	
@@ -115,8 +138,7 @@ public class UserMenu implements View{
 		int transBal = AccountDao.getAccount(transAcctID).getBalance(); //retrieve other account balance
 		transBal += transAmt;
 		
-		AccountDao.updateBalance(myAcctID, myBal);
-		AccountDao.updateBalance(transAcctID, transBal);
+		AccountDao.transfer(myAcctID, myBal, transAcctID, transBal);
 		
 		System.out.println("You transfered " + transAmt + " stars to account " + 
 		transAcctID + " from account " + myAcctID + ". Your new balance is " + myBal + " stars.");
@@ -149,42 +171,42 @@ public class UserMenu implements View{
 		int acctID = InputUtil.getNextInt();
 		
 		Player otherPlayer = PlayerDao.getPlayer(playerID);
+		
+		AccountDao.makeJoint(acctID);
+		PlayerAccountsDao.createAssoc(playerID, acctID);
 		System.out.println("You added " + otherPlayer.getName() + " to account " + acctID);
 		
-		PlayerAccountsDao.createAssoc(playerID, acctID);
+		
 	}
 	
 	
 	// get information to create a new account-------------------
 	static void openAccount() {
 		System.out.println("What kind of account would you like to open. Select from the following.");
-		System.out.println("1. Single Player CKG");
-		System.out.println("2. SinglePlayer SV");
-		System.out.println("3. Multi Player CKG");
-		System.out.println("4. MultiPlayer SV");
-			
-		int choice = InputUtil.getIntInRange(1, 4);
+		System.out.println("1. Checking");
+		System.out.println("2. Savings");
+		
+		int choice = InputUtil.getIntInRange(1, 2);
 		
 		String acctType = "";
 		
 		do {
 			switch(choice) {
-				case 1: acctType = "Single Player CKG";
+				case 1: acctType = "CKG";
 						break;
-				case 2: acctType = "SinglePlayer SV";
+				case 2: acctType = "SAV";
 						break;
-				case 3: acctType = "Multi Player CKG";
-						break;	
-				case 4: acctType = "MultiPlayer SV";
-						break;
-				default: System.out.println("Invalid input. Select a number 1-4.");
+				default: System.out.println("Invalid input. Select a number 1-2.");
 			}
-		} while (choice < 1 && choice > 4);
+		} while (choice < 1 && choice > 2);
 		
 		System.out.println("How many stars would you like to open this account with: ");
 		int depoAmt = InputUtil.getNextInt();
 		
-		Account account = new Account(0, depoAmt, acctType);
+		boolean active = true;
+		boolean joint = false;
+		
+		Account account = new Account(0, depoAmt, acctType, joint, active);
 		account = AccountDao.openAccount(account);//how to use user that is returned in load user
 		System.out.println(account);
 		//PlayerAccountsDao.createAssoc(, account.getAcctNum() );
@@ -195,7 +217,7 @@ public class UserMenu implements View{
 	void closeAccount() {
 		System.out.println("Enter the accountID of the account you would like to close.");
 		int acctID = InputUtil.getNextInt();
-		AccountDao.closeAccount(acctID);
+		AccountDao.makeInactive(acctID);
 		System.out.println("You closed account " + acctID);
 	}
 	
