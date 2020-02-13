@@ -64,9 +64,31 @@ public class HomeScreen implements View{
 		System.out.println("Enter a username");
 		String username = InputUtil.getNextString();
 		
+		if( username.length() < 8 || username.length() > 20) {
+			
+			do {
+				System.out.println("\nUsername must be between 8-20 characters.");
+				System.out.println("Enter a username");
+				username = InputUtil.getNextString();
+				
+			} while(username.length() < 8 || username.length() > 20);
+		}
+		
 		System.out.println("Enter a password");
 		String password = InputUtil.getNextString();
 
+		if( password.length() < 8 || password.length() > 20) {
+			
+			do {
+				System.out.println("\nPassword must be between 8-20 characters.");
+				System.out.println("Enter a password");
+				password = InputUtil.getNextString();
+				
+			} while(username.length() < 8 || username.length() > 20);
+		}
+		
+		
+		
 		Player player = new Player(0, name, username, password);
 		player = PlayerDao.createPlayer(player);
 		

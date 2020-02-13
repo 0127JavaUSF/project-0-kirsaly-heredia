@@ -67,25 +67,25 @@ public class UserMenu implements View{
 		System.out.println("Enter an account number.");
 		int acctID = InputUtil.getNextInt();
 		
-		acctValid(acctID);
-		
-		int balance = AccountDao.getAccount(acctID).getBalance();
-		System.out.println("You have " + balance + " stars.\n");
-		
+		if( acctValid(acctID) == true) {
+			int balance = AccountDao.getAccount(acctID).getBalance();
+			System.out.println("You have " + balance + " stars.\n");
+		}
 	}
 	
 	
-	int acctValid( int acctID) {
+	boolean acctValid(int acctID) {
+			
 		List<Integer> accounts = PlayerAccountsDao.getAccountsForPlayers(player);
 		
-		if(AccountDao.getAccount(acctID).isActive() == false || accounts.contains(acctID) == false) {
+		if( AccountDao.getAccount(acctID) == null  | accounts.contains(acctID) == false | AccountDao.getAccount(acctID).isActive() == false) {
 			do {
 				System.out.println("Invalid Account. Try again.");
 				System.out.println("Enter an account number.");
 				acctID = InputUtil.getNextInt();
-			} while (AccountDao.getAccount(acctID).isActive() == false || accounts.contains(acctID) == false);		
+			} while (AccountDao.getAccount(acctID) == null | accounts.contains(acctID) == false | AccountDao.getAccount(acctID).isActive() == false);		
 		}
-		return acctID;
+		return true;
 	}
 	
 	
@@ -112,7 +112,7 @@ public class UserMenu implements View{
 		balance += depAmt;
 		AccountDao.updateBalance(acctID, balance);
 		
-		System.out.println("You dropped of " + depAmt + " stars. Your new balance is " + balance + " stars.\n");
+		System.out.println("You dropped off " + depAmt + " stars. Your new balance is " + balance + " stars.\n");
 	}
 	
 	
