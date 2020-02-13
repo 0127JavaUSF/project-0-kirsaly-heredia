@@ -19,31 +19,45 @@ public class HomeScreen implements View{
 	public View selectOption() {
 		int selection = InputUtil.getIntInRange(1, 2);
 		switch(selection) {
-			case 1: login();
-					return new UserMenu();
-			case 2: signup();
-					UserMenu.openAccount();
-					return new UserMenu();
+			case 1: return new UserMenu(login());
+			case 2: return new UserMenu(signup());
 			default: return this;
 		}
 	}
 	
 	
 	Player login() {
+		
 		System.out.println("Enter username: ");
 		String uname = InputUtil.getNextString();
 		
 		System.out.println("Enter password: ");
 		String pword = InputUtil.getNextString();
 		
+		//if the username and password combination doesn't
+		if( PlayerDao.getPlayer(uname, pword) == null) {
+			
+			do {
+				System.out.println("\nInvalid login. Try again.");
+				
+				System.out.println("Enter username: ");
+				uname = InputUtil.getNextString();
+				
+				System.out.println("Enter password: ");
+				pword = InputUtil.getNextString();
+			} while( PlayerDao.getPlayer(uname, pword) == null);
+		}
+		
 		Player player = PlayerDao.getPlayer(uname, pword);
-		System.out.println(player);
+		
+		System.out.println("\n--------------------------");
+		System.out.println("\nWelcome " + player.getName() + "!\n");
 		
 		return player;
 	}
 	
 	
-	void signup() {
+	Player signup() {
 		System.out.println("Enter your first name");
 		String name = InputUtil.getNextString();
 		
@@ -55,7 +69,13 @@ public class HomeScreen implements View{
 
 		Player player = new Player(0, name, username, password);
 		player = PlayerDao.createPlayer(player);
-		System.out.println(player);
+		
+		UserMenu.openAccount(player);
+		
+		System.out.println("\n--------------------------");
+		System.out.println("\nWelcome " + player.getName() + "!\n");
+				
+		return player;
 	}
 	
 

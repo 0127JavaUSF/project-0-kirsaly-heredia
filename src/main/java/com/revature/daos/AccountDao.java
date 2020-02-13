@@ -65,13 +65,20 @@ public class AccountDao {
 		
 		//place db data into java variables---------------------------------
 		static Account extractAccount(ResultSet result) throws SQLException {
-			int accountNumber = result.getInt("acctNum");
+			int acctNum = result.getInt("acctNum");
 			int balance = result.getInt("balance");
 			String acctType = result.getString("acctType");
 			boolean joint = result.getBoolean("joint");
 			boolean active = result.getBoolean("active");
-			return new Account(accountNumber, balance, acctType, joint, active);
+			return new Account(acctNum, balance, acctType, joint, active);
 		}
+		
+		//place db data into java variables---------------------------------
+		static int extractAccountID(ResultSet result) throws SQLException {
+			int acctNum = result.getInt("acctNum");
+			return acctNum;
+		}
+		
 		
 		
 		//update balance in db--------------------------------------

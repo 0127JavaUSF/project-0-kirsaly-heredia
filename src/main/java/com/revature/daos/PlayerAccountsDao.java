@@ -38,15 +38,14 @@ public class PlayerAccountsDao {
 		
 		
 		//get all the accounts associated with a user--------------------------------------
-		public List<Account> getAccountsForPlayers(Player player) {
-			List<Account> accounts = new ArrayList<>();
+		public static List<Integer> getAccountsForPlayers(Player player) {
+			List<Integer> accounts = new ArrayList<>();
 			try(Connection connection = ConnectionUtil.getConnection()) {
 				
-				String sql = "SELECT accounts.acctNum, accounts.balance, accounts.acctType " +
-				"FROM accounts " +
+				String sql = "SELECT accounts.acctNum FROM accounts " +
 				"JOIN playerAccounts on  accounts.acctNum = playerAccounts.acctNum " +
 				"JOIN players on players.playerID = playerAccounts.playerID " +
-				"WHERE players.playerID = ? RETURNING *"; 
+				"WHERE players.playerID = ?"; 
 				
 				PreparedStatement ps = connection.prepareStatement(sql);
 				
@@ -55,7 +54,7 @@ public class PlayerAccountsDao {
 				ResultSet result = ps.executeQuery();
 				
 				while(result.next()) {
-					accounts.add(AccountDao.extractAccount(result));
+					accounts.add(AccountDao.extractAccountID(result));
 				}
 				
 			} catch(SQLException e) {

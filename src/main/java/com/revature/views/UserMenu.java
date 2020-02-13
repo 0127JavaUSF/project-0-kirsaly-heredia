@@ -11,13 +11,15 @@ import com.revature.util.InputUtil;
 
 public class UserMenu implements View{
 
-	//PlayerDao playerDao = new PlayerDao();
+	Player player;
 	
-
+	UserMenu(Player player){
+		this.player = player;
+	}
+	
+	
 	@Override
 	public void showMenu() {
-		System.out.println("\n--------------------------");
-		System.out.println("\nWelcome!\n");
 		System.out.println("1. Check Star Balance");
 		System.out.println("2. Drop off Stars");
 		System.out.println("3. Steal Stars (from yourself)");
@@ -47,29 +49,26 @@ public class UserMenu implements View{
 					return this;
 			case 6: addAcctPlayers();
 					return this;
-			case 7: openAccount();
+			case 7: openAccount(player);
 					return this;
 			case 8: //closeAccount();
 					return this;
 			case 0: return new HomeScreen();
 			default: return null;
-		}
-		
-				
+		}	
 	}	
-	//validate the user and their accounts
-	void validatePlayerInfo(Player player) {
+	
 		
-	}
-	
-	
-	
+	//List<Integer> accounts = PlayerAccountsDao.getAccountsForPlayers(player);
+
 	// get information to show star balance account-------------------
 	void showStars() {
+		
 		System.out.println("Enter an account number.");
 		int acctID = InputUtil.getNextInt();
+		
 		int balance = AccountDao.getAccount(acctID).getBalance();
-		System.out.println("You have " + balance + " stars.");
+		System.out.println("You have " + balance + " stars.\n");
 		
 	}
 	
@@ -95,7 +94,7 @@ public class UserMenu implements View{
 		balance += depAmt;
 		AccountDao.updateBalance(acctID, balance);
 		
-		System.out.println("You dropped of " + depAmt + " stars. Your new balance is " + balance + " stars.");
+		System.out.println("You dropped of " + depAmt + " stars. Your new balance is " + balance + " stars.\n");
 	}
 	
 	
@@ -117,7 +116,7 @@ public class UserMenu implements View{
 		
 		balance -= withAmt;
 		AccountDao.updateBalance(acctID, balance);
-		System.out.println("You stole " + withAmt + " stars from yourself. Your new balance is " + balance + " stars.");
+		System.out.println("You stole " + withAmt + " stars from yourself. Your new balance is " + balance + " stars.\n");
 	}
 	
 	
@@ -141,7 +140,7 @@ public class UserMenu implements View{
 		AccountDao.transfer(myAcctID, myBal, transAcctID, transBal);
 		
 		System.out.println("You transfered " + transAmt + " stars to account " + 
-		transAcctID + " from account " + myAcctID + ". Your new balance is " + myBal + " stars.");
+		transAcctID + " from account " + myAcctID + ". Your new balance is " + myBal + " stars.\n");
 	}
 	
 	
@@ -154,13 +153,14 @@ public class UserMenu implements View{
 		
 		Account account = AccountDao.getAccount(id);
 		List<Player> players = PlayerAccountsDao.getPlayersForAccounts(account);
-		System.out.println("\nTho following players are on account " + id);
+		System.out.println("\nThe following players are on account " + id);
 		System.out.println("| id |    name    |");
 		players.forEach(p -> {
 			System.out.printf("|%3d |%-11s |\n", 
 					p.getUserID(), p.getName());			
 		});
 	}
+	
 	
 	
 	//add a player to an account-----------------------------------
@@ -174,14 +174,12 @@ public class UserMenu implements View{
 		
 		AccountDao.makeJoint(acctID);
 		PlayerAccountsDao.createAssoc(playerID, acctID);
-		System.out.println("You added " + otherPlayer.getName() + " to account " + acctID);
-		
-		
+		System.out.println("You added " + otherPlayer.getName() + " to account " + acctID + "\n");	
 	}
 	
 	
-	// get information to create a new account-------------------
-	static void openAccount() {
+	// get information to create a new account on start up-------------------
+	static Player openAccount(Player player) {
 		System.out.println("What kind of account would you like to open. Select from the following.");
 		System.out.println("1. Checking");
 		System.out.println("2. Savings");
@@ -208,17 +206,18 @@ public class UserMenu implements View{
 		
 		Account account = new Account(0, depoAmt, acctType, joint, active);
 		account = AccountDao.openAccount(account);//how to use user that is returned in load user
-		System.out.println(account);
-		//PlayerAccountsDao.createAssoc(, account.getAcctNum() );
+		
+		PlayerAccountsDao.createAssoc(player.getUserID(), account.getAcctNum() );
+		
+		return player;
 	}
-	
 	
 	// get information to close an account-------------------
 	void closeAccount() {
 		System.out.println("Enter the accountID of the account you would like to close.");
 		int acctID = InputUtil.getNextInt();
 		AccountDao.makeInactive(acctID);
-		System.out.println("You closed account " + acctID);
+		System.out.println("You closed account " + acctID + "\n");
 	}
 	
 
