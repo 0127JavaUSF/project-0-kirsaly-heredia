@@ -51,7 +51,7 @@ public class UserMenu implements View{
 					return this;
 			case 7: openAccount(player);
 					return this;
-			case 8: //closeAccount();
+			case 8: closeAccount();
 					return this;
 			case 0: return new HomeScreen();
 			default: return null;
@@ -59,7 +59,7 @@ public class UserMenu implements View{
 	}	
 	
 		
-	//List<Integer> accounts = PlayerAccountsDao.getAccountsForPlayers(player);
+	
 
 	// get information to show star balance account-------------------
 	void showStars() {
@@ -67,9 +67,25 @@ public class UserMenu implements View{
 		System.out.println("Enter an account number.");
 		int acctID = InputUtil.getNextInt();
 		
+		acctValid(acctID);
+		
 		int balance = AccountDao.getAccount(acctID).getBalance();
 		System.out.println("You have " + balance + " stars.\n");
 		
+	}
+	
+	
+	int acctValid( int acctID) {
+		List<Integer> accounts = PlayerAccountsDao.getAccountsForPlayers(player);
+		
+		if(AccountDao.getAccount(acctID).isActive() == false || accounts.contains(acctID) == false) {
+			do {
+				System.out.println("Invalid Account. Try again.");
+				System.out.println("Enter an account number.");
+				acctID = InputUtil.getNextInt();
+			} while (AccountDao.getAccount(acctID).isActive() == false || accounts.contains(acctID) == false);		
+		}
+		return acctID;
 	}
 	
 	
@@ -78,6 +94,8 @@ public class UserMenu implements View{
 		
 		System.out.println("Enter an account number.");
 		int acctID = InputUtil.getNextInt();
+		
+		acctValid(acctID);
 		
 		System.out.println("How many stars will you drop off.");
 		int depAmt = InputUtil.getNextInt();
@@ -102,6 +120,9 @@ public class UserMenu implements View{
 	void stealStars() {
 		System.out.println("Enter an account number.");
 		int acctID = InputUtil.getNextInt();
+		
+		acctValid(acctID);
+		
 		System.out.println("How many stars will you steal.");
 		int withAmt = InputUtil.getNextInt();
 		int balance = AccountDao.getAccount(acctID).getBalance();
@@ -124,6 +145,8 @@ public class UserMenu implements View{
 	void transferStars() {
 		System.out.println("Enter the account number from which you wish to transfer.");
 		int myAcctID = InputUtil.getNextInt(); //current player's account 
+		
+		acctValid(myAcctID);
 		
 		System.out.println("How many stars will you transfer?");
 		int transAmt = InputUtil.getNextInt(); //stars to transfer
@@ -151,6 +174,8 @@ public class UserMenu implements View{
 		
 		int id = InputUtil.getNextInt();
 		
+		acctValid(id);
+		
 		Account account = AccountDao.getAccount(id);
 		List<Player> players = PlayerAccountsDao.getPlayersForAccounts(account);
 		System.out.println("\nThe following players are on account " + id);
@@ -169,6 +194,8 @@ public class UserMenu implements View{
 		int playerID = InputUtil.getNextInt();
 		System.out.println("Which account would you like to add them to? Enter account number.");
 		int acctID = InputUtil.getNextInt();
+		
+		acctValid(acctID);
 		
 		Player otherPlayer = PlayerDao.getPlayer(playerID);
 		
@@ -216,6 +243,9 @@ public class UserMenu implements View{
 	void closeAccount() {
 		System.out.println("Enter the accountID of the account you would like to close.");
 		int acctID = InputUtil.getNextInt();
+		
+		acctValid(acctID);
+		
 		AccountDao.makeInactive(acctID);
 		System.out.println("You closed account " + acctID + "\n");
 	}
