@@ -20,6 +20,7 @@ public class UserMenu implements View{
 	
 	@Override
 	public void showMenu() {
+		System.out.println("--------------------------\n");
 		System.out.println("1. Check Star Balance");
 		System.out.println("2. Drop off Stars");
 		System.out.println("3. Steal Stars (from yourself)");
@@ -29,6 +30,7 @@ public class UserMenu implements View{
 		System.out.println("7. Open an account.");
 		System.out.println("8. Close Account");
 		System.out.println("0. Logout");
+		System.out.println("\n--------------------------");
 	}
 
 	@Override
@@ -69,6 +71,7 @@ public class UserMenu implements View{
 		
 		if( acctValid(acctID) == true) {
 			int balance = AccountDao.getAccount(acctID).getBalance();
+			System.out.println("\n--------------------------\n");
 			System.out.println("You have " + balance + " stars.\n");
 		}
 	}
@@ -78,12 +81,12 @@ public class UserMenu implements View{
 			
 		List<Integer> accounts = PlayerAccountsDao.getAccountsForPlayers(player);
 		
-		if( AccountDao.getAccount(acctID) == null  | accounts.contains(acctID) == false | AccountDao.getAccount(acctID).isActive() == false) {
+		if( AccountDao.getAccount(acctID) == null  | accounts.contains(acctID) == false || AccountDao.getAccount(acctID).isActive() == false) {
 			do {
 				System.out.println("Invalid Account. Try again.");
 				System.out.println("Enter an account number.");
 				acctID = InputUtil.getNextInt();
-			} while (AccountDao.getAccount(acctID) == null | accounts.contains(acctID) == false | AccountDao.getAccount(acctID).isActive() == false);		
+			} while (AccountDao.getAccount(acctID) == null | accounts.contains(acctID) == false || AccountDao.getAccount(acctID).isActive() == false);		
 		}
 		return true;
 	}
@@ -111,7 +114,7 @@ public class UserMenu implements View{
 		int balance = AccountDao.getAccount(acctID).getBalance();
 		balance += depAmt;
 		AccountDao.updateBalance(acctID, balance);
-		
+		System.out.println("\n--------------------------\n");
 		System.out.println("You dropped off " + depAmt + " stars. Your new balance is " + balance + " stars.\n");
 	}
 	
@@ -137,6 +140,7 @@ public class UserMenu implements View{
 		
 		balance -= withAmt;
 		AccountDao.updateBalance(acctID, balance);
+		System.out.println("\n--------------------------\n");
 		System.out.println("You stole " + withAmt + " stars from yourself. Your new balance is " + balance + " stars.\n");
 	}
 	
@@ -162,6 +166,7 @@ public class UserMenu implements View{
 		
 		AccountDao.transfer(myAcctID, myBal, transAcctID, transBal);
 		
+		System.out.println("\n--------------------------\n");
 		System.out.println("You transfered " + transAmt + " stars to account " + 
 		transAcctID + " from account " + myAcctID + ". Your new balance is " + myBal + " stars.\n");
 	}
@@ -178,8 +183,9 @@ public class UserMenu implements View{
 		
 		Account account = AccountDao.getAccount(id);
 		List<Player> players = PlayerAccountsDao.getPlayersForAccounts(account);
+		System.out.println("\n--------------------------");
 		System.out.println("\nThe following players are on account " + id);
-		System.out.println("| id |    name    |");
+		System.out.println("\n| id |    name    |");
 		players.forEach(p -> {
 			System.out.printf("|%3d |%-11s |\n", 
 					p.getUserID(), p.getName());			

@@ -8,11 +8,15 @@ public class HomeScreen implements View{
 
 	@Override
 	public void showMenu() {
-		System.out.println("__________________________________\n");
-		System.out.println("Welcome to Mario Party Center!");                                  
-		System.out.println("__________________________________\n");
-		System.out.println("1. Login");
-		System.out.println("2. SignUp");
+	
+		 System.out.println(" _____         _        _____         _          _____         _           ");
+		 System.out.println("|     |___ ___|_|___   |  _  |___ ___| |_ _ _   |     |___ ___| |_ ___ ___");
+		 System.out.println("| | | | .'|  _| | . |  |   __| .'|  _|  _| | |  |   --| -_|   |  _| -_|  _|");
+		 System.out.println("|_|_|_|__,|_| |_|___|  |__|  |__,|_| |_| |_  |  |_____|___|_|_|_| |___|_|  ");
+		 System.out.println("           				 |___|");                            
+		 System.out.println("_____________________________________________________________________________\n");
+		 System.out.println("1. Login");
+		 System.out.println("2. SignUp");
 	}
 
 	@Override
